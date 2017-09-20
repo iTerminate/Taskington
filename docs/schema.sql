@@ -17,10 +17,16 @@ Create Table beamline (
 DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user" (
     Id SERIAL NOT NULL,
-    username VARCHAR(30) NOT NULL,
-    beamline_id INTEGER REFERENCES beamline,
+    username VARCHAR(30) NOT NULL,    
     local_password VARCHAR(30), 
     CONSTRAINT user_pkey PRIMARY KEY (Id)
+);
+
+DROP TABLE IF EXISTS user_beamline CASCADE;
+CREATE TABLE user_beamline (
+    beamline_id INTEGER REFERENCES beamline,
+    user_id INTEGER REFERENCES "user" NOT NULL,
+    UNIQUE (beamline_id, user_id)
 );
 
 DROP TABLE IF EXISTS user_role CASCADE; 
@@ -130,7 +136,3 @@ CREATE TABLE process_node_supported_software (
     software_id INTEGER REFERENCES software NOT NULL,
     UNIQUE (process_node_id, software_id)
 );
-
-
-
-
